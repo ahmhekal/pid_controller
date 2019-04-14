@@ -1,0 +1,42 @@
+###### REFLECTION_PID #######
+
+
+
+## Describtion of the effect each of the P, I, D components had in my implementation.
+
+- I used two pid controllers: 
+1- pid controller for steering angle (the main controller) 
+2- another pid controller for throttling - not very important as I multiplied the output of it by 0.03 (line 95)-. I did this because I noticed that the throttling output from the controller is high (We can neglect it and simply set the throttling to 0.3)
+
+
+for the main pid controller (pid_steer):
+
+The P, or "proportional component" causes the car to steer proportional (and opposite) to the car's distance from the lane center (Cross Track Error) - if the car is far to the right it steers hard to the left, if it's slightly to the left it steers slightly to the right. The P controller produces overshot.
+
+The D, or "differential component" reduces the overshoot that p component produce. A properly tuned D parameter will cause the car to approach the center line smoothly without overshoting. this component steers the car based on the change of the cross-track error.
+
+The I "Integral component" steers the car based on the accumulated cross-track error. This counteracts the bias on the steering created by the vehicle itself or the curves on the track.I think this component helps us mainly on the curves, giving us the ability to follow them closer to the lane center.
+
+
+## Describe how the final hyperparameters were chosen.
+
+
+I tried many different values for the parameters. finally I chose them based on trial and error (I chose the best values manually after many trials)
+
+my final parameters for the steering pid controller are:
+  kp = 0.15 (p component)
+  kd = 3.0 (d component)
+  ki = 0.00001 (i component)
+I noticed that the kp value has to be low not to make a high oscilations and the kd has to be much higher (but not too much).
+and I noticed that the ki component is not very important (doesn't make a huge impact) but it has to be very low (or even 0!)  
+
+I also used a pid controller for throttle. I used these parameters for it :
+  kp = 0.2
+  kd = 4.0
+  ki = 0.00001
+
+and then I multiplied the throttle value by 0.03 because I noticed that the value after the controller is high. after that I noticed that the throttle value was around 0.3
+so this controller isn't very important.
+
+I also set the reference speed to 80. but the actual speed was much lower because I decreased the throttle value.
+
